@@ -147,53 +147,76 @@ class Funcoes
      * */
     
 	public function SequenciaCrescente(array $arr): boolean {
-        $arrayOrdenado = $arr;
-    sort($arrayOrdenado);
-    $reverse = false;
-    $arrayTestaDuplicado = [];
+         $arrayWork = $arr;
 
-    for($i = 0; $i < count($arr); $i++){
-        $menor = 0;
-        if ($arr[$i] < 0){
-            $reverse = true;
-        }
-    }
+	    $semRepetidas = [];
+	    $contRepetidas = 0;
 
-    if ($reverse === true ){
-        array_shift($arrayOrdenado);
-    }else{
-        array_pop($arrayOrdenado);
-    }
 
-    for($i = 0; $i < count($arr); $i++){
-        $contDuplicados = 0;
-        if (in_array($arr[$i], $arrayTestaDuplicado)){
-            $contDuplicados++;
-        }else{
-            array_push($arrayTestaDuplicado, $arr[$i]);
-        }
+	    for ($i = 0; $i < count($arrayWork); $i++){
+		if (in_array($arrayWork[$i], $semRepetidas)){
+		    $contRepetidas++;
+		    //array_push($semRepetidas, $arrayWork[$i]);
+		}else{
+		    array_push($semRepetidas, $arrayWork[$i]);
+		}
+	    }
 
-        if($contDuplicados === 2){
-            return false;
-        }
-    }
-    
-    for($i = 0; $i < count($arrayOrdenado); $i++){
-        $arrayTeste = [];
-        for($j = 0; $j < count($arr); $j++){
-            if ($j===$i){
-                continue;
-            }else{
-                array_push($arrayTeste, $arr[$j]);
-            }
-        if ($arrayTeste === $arrayOrdenado){
-            
-            return true;
-        };
-        }
-    }
+	    if ($contRepetidas === 2) {
+		return false;
+	    }
 
-    return false;
+
+	    for ($i = 0; $i < count($arrayWork); $i++){
+		$arrayTemp = [];
+		$crescente = false;
+		$contCrescente = 0;
+		$contReverse = 0;
+		$reverse = false;
+		for ($j = 0; $j < count($arrayWork); $j++){
+		    if ($j === $i){
+			continue;
+		    }
+		    array_push($arrayTemp, $arrayWork[$j]);
+
+		}
+
+		//para verificar se está crescente 
+		for ($j = 0; $j < count($arrayTemp) - 1; $j++){
+		    if ($arrayTemp[$j] < $arrayTemp[$j + 1]){
+			$contCrescente++;
+		    }
+
+		    if ($arrayTemp[$j] < 0){
+			$contReverse++;
+			//$reverse = true;
+		    }
+
+		    if ($contReverse === 1){
+			$reverse = true;
+		    }else if ($contReverse === 2){$reverse = false;}
+		}
+		sort($semRepetidas);
+		if (count($arrayTemp) < count($semRepetidas)){
+		    if($reverse){
+			array_shift($semRepetidas);
+		    }else{
+			array_pop($semRepetidas);
+		    }
+		}
+
+		if ($contCrescente == count($arrayTemp ) - 1){
+		    $crescente = true;
+		}
+
+		if ($arrayTemp === $semRepetidas && $crescente){
+		    return true;
+		}
+	    }
+
+	    sort($semRepetidas);
+
+	    return false;
     }
 }
 
