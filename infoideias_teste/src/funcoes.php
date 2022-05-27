@@ -131,94 +131,58 @@ class Funcoes
     [1, 1, 2, 3, 4, 4] false - 
     [1, 4, 10, 4, 2] false
     [10, 1, 2, 3, 4, 5] true
-    [1, 1, 1, 2, 3] false
-    [0, -2, 5, 6] true - 
-    [1, 2, 3, 4, 5, 3, 5, 6] false
+    [1, 1, 1, 2, 3] false -
+    [0, -2, 5, 6] true 
+    [1, 2, 3, 4, 5, 3, 5, 6] false - 
     [40, 50, 60, 10, 20, 30] false
     [1, 1] true
     [1, 2, 5, 3, 5] true
     [1, 2, 5, 5, 5] false - 
     [10, 1, 2, 3, 4, 5, 6, 1] false
-    [1, 2, 3, 4, 3, 6] true - 
+    [1, 2, 3, 4, 3, 6] true 
     [1, 2, 3, 4, 99, 5, 6] true
-    [123, -17, -5, 1, 2, 3, 12, 43, 45] true
+    [123, -17, -5, 1, 2, 3, 12, 43, 45] true - 
     [3, 5, 67, 98, 3] true - 
 
      * */
     
-	public function SequenciaCrescente(array $arr): boolean {
-         $arrayWork = $arr;
+	public function SequenciaCrescente(array $arr): bool {
+        $arrayWork = $arr;
 
-	    $semRepetidas = [];
-	    $contRepetidas = 0;
+        for ($i = 0; $i < count($arrayWork); $i++){
+            $arrayTemp = [];
+            for ($j = 0; $j < count($arrayWork); $j++){
+                if ($j === $i){
+                    continue;
+                }
+                array_push($arrayTemp, $arrayWork[$j]);
+            }
 
+            $checaSequencia = 0;
+            $quantInvalidas = 0;
+            // mostra o array temporario
+            for ($j = 0; $j < count($arrayTemp); $j++){
+                if ($j === 0){
+                    $checaSequencia = $j;
+                }
 
-	    for ($i = 0; $i < count($arrayWork); $i++){
-		if (in_array($arrayWork[$i], $semRepetidas)){
-		    $contRepetidas++;
-		    //array_push($semRepetidas, $arrayWork[$i]);
-		}else{
-		    array_push($semRepetidas, $arrayWork[$i]);
-		}
-	    }
-
-	    if ($contRepetidas === 2) {
-		return false;
-	    }
-
-
-	    for ($i = 0; $i < count($arrayWork); $i++){
-		$arrayTemp = [];
-		$crescente = false;
-		$contCrescente = 0;
-		$contReverse = 0;
-		$reverse = false;
-		for ($j = 0; $j < count($arrayWork); $j++){
-		    if ($j === $i){
-			continue;
-		    }
-		    array_push($arrayTemp, $arrayWork[$j]);
-
-		}
-
-		//para verificar se está crescente 
-		for ($j = 0; $j < count($arrayTemp) - 1; $j++){
-		    if ($arrayTemp[$j] < $arrayTemp[$j + 1]){
-			$contCrescente++;
-		    }
-
-		    if ($arrayTemp[$j] < 0){
-			$contReverse++;
-			//$reverse = true;
-		    }
-
-		    if ($contReverse === 1){
-			$reverse = true;
-		    }else if ($contReverse === 2){$reverse = false;}
-		}
-		sort($semRepetidas);
-		if (count($arrayTemp) < count($semRepetidas)){
-		    if($reverse){
-			array_shift($semRepetidas);
-		    }else{
-			array_pop($semRepetidas);
-		    }
-		}
-
-		if ($contCrescente == count($arrayTemp ) - 1){
-		    $crescente = true;
-		}
-
-		if ($arrayTemp === $semRepetidas && $crescente){
-		    return true;
-		}
-	    }
-
-	    sort($semRepetidas);
-
+                if ($arrayTemp[$j] < $checaSequencia){
+                    $quantInvalidas++;
+                    break;
+                }else{
+                    $checaSequencia = $arrayTemp[$j];
+                }
+            }
+            
+            if ($quantInvalidas === 0){
+                return true;
+            }
+        }
+	
 	    return false;
     }
 }
 
-//$a = new Funcoes();
-//a -> SeculoAno(2000);
+
+$a = new Funcoes();
+echo $a -> SequenciaCrescente([3, 5, 67, 98, 3]);
